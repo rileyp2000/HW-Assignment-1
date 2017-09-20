@@ -50,6 +50,7 @@ public class FileReader {
 
 			PrintWriter write = fileWrite(outputFile);
 			write.println("Part " + index + ": Unable to Open File");
+			write.close();
 			return null;
 
 		}
