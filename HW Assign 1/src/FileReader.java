@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -38,6 +39,12 @@ public class FileReader {
 			out.println("Files Identical");
 		else
 			out.println("Files Not Identical");
+		
+		//This is part 3
+		Scanner madLibs = fileRead(args[2], 3);
+		ArrayList<String> neededParts = findWords(madLibs);
+		
+		
 		
 		
 		
@@ -145,6 +152,41 @@ public class FileReader {
 		}
 		
 		return f1.equals(f2);
+	}
+	
+	/**
+	 * 
+	 * @param mdLib
+	 * @return
+	 *
+	 *ArrayList<String>
+	 */
+	public static ArrayList<String> findWords(Scanner mdLib){
+		ArrayList<String> missingWords = new ArrayList<String>();
+		
+		while(mdLib.hasNextLine()) {
+			int pos = 0;
+			String line = mdLib.nextLine();
+			while(line.indexOf("<",pos) != -1) {
+				missingWords.add(line.substring(line.indexOf("<",pos), line.indexOf(">", pos) ));
+				pos = line.indexOf("<",pos+1);
+			}
+		}
+		return missingWords; 
+	}
+	
+	public static void setWords(Scanner mdLib, ArrayList<String> replace) {
+		int word = 0;
+		
+		while(mdLib.hasNextLine()) {
+			String line = mdLib.nextLine();
+			int pos = 0;
+			while(line.indexOf("<",pos) != -1) {
+				line = line.substring(0, line.indexOf("<", fromIndex)
+				pos = line.indexOf("<",pos+1);
+			}			
+		}
+		
 	}
 
 }
