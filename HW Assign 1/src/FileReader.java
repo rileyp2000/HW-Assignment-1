@@ -22,6 +22,7 @@ public class FileReader {
 			System.exit(1);
 		}*/
 		
+		//This is part 1
 		PrintWriter out = fileWrite(outputFile);
 
 		Scanner in1 = fileRead(args[0], 1);
@@ -29,7 +30,20 @@ public class FileReader {
 			out.println("Braces Balanced\n");
 		else
 			out.println("Braces Not Balanced\n");
+		
+		
+		//This is part 2
+		Scanner in2 = fileRead(args[1],2);
+		if(compareFile(in1, in2))
+			out.println("Files Identical");
+		else
+			out.println("Files Not Identical");
+		
+		
+		
+		out.close();
 	}
+	
 
 	/**
 	 * 
@@ -59,22 +73,6 @@ public class FileReader {
 
 	}
 
-	public static boolean checkBraces(Scanner in) {
-		int openBrace = 0;
-		int closeBrace = 0;
-
-		while (in.hasNextLine()) {
-			char[] s = in.nextLine().toCharArray();
-			for (char c : s) {
-				if (c == '{')
-					openBrace++;
-				else if (c == '}')
-					closeBrace++;
-			}
-		}
-		return openBrace == closeBrace;
-	}
-
 	/**
 	 * @param fname a file name
 	 * @return
@@ -99,18 +97,54 @@ public class FileReader {
 		return output;
 
 	}
-}
+	
+	
+	
+	/**
+	 * <p> This checks if the file has balanced braces<\p>
+	 * @param in Scanner file
+	 * @return
+	 *
+	 *boolean if the braces are balanced
+	 */
+	public static boolean checkBraces(Scanner in) {
+		int openBrace = 0;
+		int closeBrace = 0;
 
-/*
- * public static void main(String[] args) { if (args.length < 2) {
- * System.out.println("Not enough files my dude"); System.exit(1); }
- * 
- * Scanner file1 = fileRead(args[0]); if (file1 == null) System.exit(1);
- * 
- * Scanner file2 = fileRead(args[1]); if (file2 == null) System.exit(1);
- * 
- * //PrintWriter out = fileWrite(args[1]);
- * 
- * 
- * in.close(); out.close(); }
- */
+		while (in.hasNextLine()) {
+			char[] s = in.nextLine().toCharArray();
+			for (char c : s) {
+				if (c == '{')
+					openBrace++;
+				else if (c == '}')
+					closeBrace++;
+			}
+		}
+		return openBrace == closeBrace;
+	}
+	
+	
+	/**
+	 * 
+	 * @param f1 first file
+	 * @param f2 second file
+	 * @return
+	 *
+	 *boolean if they are equal
+	 */
+	public static boolean compareFile(Scanner f1, Scanner f2) {
+		String file1 = "";
+		String file2 = "";
+	
+		while(f1.hasNextLine()) {
+			file1 += f1.nextLine();
+		}
+		
+		while(f2.hasNextLine()) {
+			file2 += f2.nextLine();
+		}
+		
+		return f1.equals(f2);
+	}
+
+}
