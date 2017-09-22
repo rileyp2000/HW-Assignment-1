@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -36,21 +37,24 @@ public class FileReader {
 	
 		
 		//This is part 2
+		in1 = fileRead(args[0],1);
 		Scanner in2 = fileRead(args[1],2);
+
 		if(compareFile(in1, in2))
 			out.println("Files Identical");
 		else
 			out.println("Files Not Identical");
-	/*	
+
+		
 		//This is part 3
 		Scanner madLibs = fileRead(args[2], 3);
 		ArrayList<String> neededParts = findWords(madLibs);
-		if(args[3] == null){
+		//if(args[3] == null){
 			ArrayList<String> words = newWords(neededParts);
 			madLibs = setWords(madLibs, words);
 			while(madLibs.hasNextLine())
 				out.println(madLibs.nextLine());
-		}*/
+		//}
 		
 		
 		
@@ -212,10 +216,20 @@ public class FileReader {
 	 */
 	public static ArrayList<String> newWords(ArrayList<String> wordList){
 
+		//JFrame frame = new JFrame("Gimme some words!!!");
+		Scanner kybd = new Scanner(System.in);
+		
 		ArrayList<String> newWords = new ArrayList<String>();
 		int i = 0;
-		for(String s : wordList)
-			newWords.add(JOptionPane.showInputDialog("Please input a " + wordList.get(i) ));
+		
+		for(String s : wordList) {
+			//newWords.add(JOptionPane.showInputDialog(frame, "Please input a " + wordList.get(i) ));
+			System.out.println("Please input a " + wordList.get(i) );
+			newWords.add(kybd.nextLine());
+		}
+		
+		kybd.close();
+		
 		return newWords;
 	}
 
