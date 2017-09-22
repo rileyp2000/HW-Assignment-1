@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 /**
  * <p>
  * This is the File Reading and Character matching and word substitution
@@ -18,14 +20,14 @@ public class FileReader {
 
 	public static void main(String[] args) {
 		
-		/*if (args.length < 3) {
+		if (args.length < 3) {
 			System.out.println("Not enough files my dude");
 			System.exit(1);
-		}*/
+		}
 		
-		//This is part 1
 		PrintWriter out = fileWrite(outputFile);
 
+		//This is part 1
 		Scanner in1 = fileRead(args[0], 1);
 		if (checkBraces(in1))
 			out.println("Braces Balanced\n");
@@ -43,7 +45,12 @@ public class FileReader {
 		//This is part 3
 		Scanner madLibs = fileRead(args[2], 3);
 		ArrayList<String> neededParts = findWords(madLibs);
-		
+		if(args[3] == null){
+			ArrayList<String> words = newWords(neededParts);
+			madLibs = setWords(madLibs, words);
+			while(madLibs.hasNextLine())
+				out.println(madLibs.nextLine());
+		}
 		
 		
 		
@@ -175,18 +182,41 @@ public class FileReader {
 		return missingWords; 
 	}
 	
-	public static void setWords(Scanner mdLib, ArrayList<String> replace) {
+	/**
+	 * 
+	 * @param mdLib the poem with the missing words
+	 * @param replace the words to replace the string with
+	 */
+	public static Scanner setWords(Scanner mdLib, ArrayList<String> replace) {
+		Scanner copy = mdLib.reset();
+		
 		int word = 0;
 		
-		while(mdLib.hasNextLine()) {
-			String line = mdLib.nextLine();
+		while(copy.hasNextLine()) {
+			String line = copy.nextLine();
 			int pos = 0;
 			while(line.indexOf("<",pos) != -1) {
-				line = line.substring(0, line.indexOf("<", fromIndex)
+				line = line.substring(0, line.indexOf("<",pos)) + replace.get(word)
+						+ line.substring(line.indexOf(word),pos);
 				pos = line.indexOf("<",pos+1);
 			}			
 		}
+		return copy;
 		
+	}
+	
+	/**
+	 * 
+	 * @param wordList list of the parts of speech
+	 * @return ArrayList<String> of the new words to put into the story
+	 */
+	public static ArrayList<String> newWords(ArrayList<String> wordList){
+
+		ArrayList<String> newWords = new ArrayList<String>();
+		int i = 0;
+		for(String s : wordList)
+			newWords.add(JOptionPane.showInputDialog("Please input a " + wordList.get(i) ));
+		return newWords;
 	}
 
 }
