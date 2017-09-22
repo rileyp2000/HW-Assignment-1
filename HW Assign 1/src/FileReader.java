@@ -51,6 +51,7 @@ public class FileReader {
 		ArrayList<String> neededParts = findWords(madLibs);
 		//if(args[3] == null){
 			ArrayList<String> words = newWords(neededParts);
+			//SETWORDS DOESNT WORK
 			madLibs = setWords(madLibs, words);
 			while(madLibs.hasNextLine())
 				out.println(madLibs.nextLine());
@@ -126,19 +127,18 @@ public class FileReader {
 	 *boolean if the braces are balanced
 	 */
 	public static boolean checkBraces(Scanner in) {
-		int openBrace = 0;
-		int closeBrace = 0;
-
+		int brace = 0;
+		//ALSO NEED TO CHECK IF THE BRACES ARE PROPERLY ORDERED
 		while (in.hasNextLine()) {
 			char[] s = in.nextLine().toCharArray();
 			for (char c : s) {
 				if (c == '{')
-					openBrace++;
+					brace++;
 				else if (c == '}')
-					closeBrace++;
+					brace--;
 			}
 		}
-		return openBrace == closeBrace;
+		return brace == 0;
 	}
 	
 	
@@ -153,7 +153,7 @@ public class FileReader {
 	public static boolean compareFile(Scanner f1, Scanner f2) {
 		String file1 = "";
 		String file2 = "";
-	
+	//CHANGE THIS TO DO BY LINE NOT MY STUPID WAY
 		while(f1.hasNextLine()) {
 			file1 += f1.nextLine();
 		}
@@ -195,10 +195,11 @@ public class FileReader {
 		Scanner copy = mdLib.reset();
 		
 		int word = 0;
-		
+		//THIS DOES NOT WORK YOU IDIOT WHAT ARE YOU THINKING THERE IS NO WAY THIS COULD EVER WORK YOU STUPID
 		while(copy.hasNextLine()) {
 			String line = copy.nextLine();
 			int pos = 0;
+			//CHANGE THIS ENTIRELY
 			while(line.indexOf("<",pos) != -1) {
 				line = line.substring(0, line.indexOf("<",pos)) + replace.get(word)
 						+ line.substring(line.indexOf(word),pos);
