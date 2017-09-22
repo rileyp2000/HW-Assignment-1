@@ -128,7 +128,7 @@ public class FileReader {
 	 */
 	public static boolean checkBraces(Scanner in) {
 		int brace = 0;
-		//ALSO NEED TO CHECK IF THE BRACES ARE PROPERLY ORDERED
+		
 		while (in.hasNextLine()) {
 			char[] s = in.nextLine().toCharArray();
 			for (char c : s) {
@@ -151,18 +151,17 @@ public class FileReader {
 	 *boolean if they are equal
 	 */
 	public static boolean compareFile(Scanner f1, Scanner f2) {
-		String file1 = "";
-		String file2 = "";
-	//CHANGE THIS TO DO BY LINE NOT MY STUPID WAY
-		while(f1.hasNextLine()) {
-			file1 += f1.nextLine();
+	//NEED TO TEST
+		while(f1.hasNextLine()){
+			if(!f2.hasNextLine())
+				return false;
+			String file1 = f1.nextLine();
+			String file2 = f2.nextLine();
+			if(file1 != file2)
+				return false;
 		}
-		
-		while(f2.hasNextLine()) {
-			file2 += f2.nextLine();
-		}
-		
-		return file1.equals(file2);
+		 return true;
+
 	}
 	
 	/**
