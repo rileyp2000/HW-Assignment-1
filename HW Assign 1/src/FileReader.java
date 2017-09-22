@@ -33,7 +33,7 @@ public class FileReader {
 			out.println("Braces Balanced\n");
 		else
 			out.println("Braces Not Balanced\n");
-		
+	
 		
 		//This is part 2
 		Scanner in2 = fileRead(args[1],2);
@@ -41,7 +41,7 @@ public class FileReader {
 			out.println("Files Identical");
 		else
 			out.println("Files Not Identical");
-		
+	/*	
 		//This is part 3
 		Scanner madLibs = fileRead(args[2], 3);
 		ArrayList<String> neededParts = findWords(madLibs);
@@ -50,7 +50,7 @@ public class FileReader {
 			madLibs = setWords(madLibs, words);
 			while(madLibs.hasNextLine())
 				out.println(madLibs.nextLine());
-		}
+		}*/
 		
 		
 		
@@ -158,7 +158,7 @@ public class FileReader {
 			file2 += f2.nextLine();
 		}
 		
-		return f1.equals(f2);
+		return file1.equals(file2);
 	}
 	
 	/**
