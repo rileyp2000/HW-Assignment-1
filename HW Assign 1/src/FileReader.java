@@ -27,7 +27,7 @@ public class FileReader {
 		}
 		
 		PrintWriter out = fileWrite(outputFile);
-
+/*
 		//This is part 1
 		Scanner in1 = fileRead(args[0], 1);
 		if (checkBraces(in1))
@@ -45,20 +45,24 @@ public class FileReader {
 		else
 			out.println("Files Not Identical");
 
-/*		
+		*/
 		//This is part 3
 		Scanner madLibs = fileRead(args[2], 3);
 		ArrayList<String> neededParts = findWords(madLibs);
+		
 		//if(args[3] == null){
 			ArrayList<String> words = newWords(neededParts);
 			//SETWORDS DOESNT WORK
 			madLibs = setWords(madLibs, words);
-			while(madLibs.hasNextLine())
-				out.println(madLibs.nextLine());
+			
+			while(madLibs.hasNextLine()){
+				String s = madLibs.nextLine();
+				out.println(s);
+			}
 		//}
 		
 		
-		*/
+		
 		
 		out.close();
 	}
@@ -167,7 +171,7 @@ public class FileReader {
 	/**
 	 * 
 	 * @param mdLib
-	 * @return
+	 * @return 
 	 *
 	 *ArrayList<String>
 	 */
