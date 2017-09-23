@@ -45,7 +45,7 @@ public class FileReader {
 		else
 			out.println("Files Not Identical");
 
-		
+/*		
 		//This is part 3
 		Scanner madLibs = fileRead(args[2], 3);
 		ArrayList<String> neededParts = findWords(madLibs);
@@ -58,7 +58,7 @@ public class FileReader {
 		//}
 		
 		
-		
+		*/
 		
 		out.close();
 	}
@@ -151,13 +151,13 @@ public class FileReader {
 	 *boolean if they are equal
 	 */
 	public static boolean compareFile(Scanner f1, Scanner f2) {
-	//NEED TO TEST
+	
 		while(f1.hasNextLine()){
 			if(!f2.hasNextLine())
 				return false;
 			String file1 = f1.nextLine();
 			String file2 = f2.nextLine();
-			if(file1 != file2)
+			if(!file1.equals(file2))
 				return false;
 		}
 		 return true;
