@@ -34,9 +34,9 @@ public class FileReader {
 
 		// This is part 1
 		// Reads in the first file and checks if the braces within it are
-		// balanced properly (syntatically)
+		// balanced properly (syntactically)
 		Scanner in1 = fileRead(args[0], 1);
-		if (checkBraces(in1))
+		if (in1 != null && checkBraces(in1))
 			out.println("Braces Balanced\n");
 		else
 			out.println("Braces Not Balanced\n");
@@ -56,11 +56,12 @@ public class FileReader {
 		// replace them with words
 		// supplied either by the user or a file
 		Scanner madLibs = fileRead(args[2], 3);
+		if(madLibs != null) {
 		if (args.length < 4)
 			setWords(madLibs, args[2], false, "");
 		else
 			setWords(madLibs, args[2], true, args[3]);
-
+		}
 		out.close();
 	}
 
@@ -84,6 +85,7 @@ public class FileReader {
 			PrintWriter write = fileWrite(outputFile);
 			write.println("Part " + index + ": Unable to Open File");
 			write.close();
+			//System.exit(1);???
 			return null;
 
 		}
@@ -110,6 +112,7 @@ public class FileReader {
 		} catch (FileNotFoundException ex) {
 
 			System.out.println("Cant open file: " + ex.getMessage() + " " + fname);
+			//System.exit(1);???
 			return null;
 
 		}
