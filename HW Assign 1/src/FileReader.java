@@ -49,14 +49,10 @@ public class FileReader {
 		//This is part 3
 		Scanner madLibs = fileRead(args[2], 3);
 				
-		if(args.length < 4){
-			setWords(madLibs, args[2]);
-			
-			}
-		
-		
-		
-		
+		if(args.length < 4)
+			setWords(madLibs, args[2], false, "");
+		else
+			setWords(madLibs, args[2], true, args[3]);
 		
 		out.close();
 	}
@@ -188,11 +184,15 @@ public class FileReader {
 	 * @param mdLib the poem with the missing words
 	 * @param replace the words to replace the string with
 	 */
-	public static void setWords(Scanner mdLib, String fname) {
+	public static void setWords(Scanner mdLib, String fname, boolean fromFile, String repFName) {
 		//this gets the needed parts
 		ArrayList<String> neededParts = findWords(mdLib);
 		//this asks for the new words
-		ArrayList<String> replace = newWords(neededParts);
+		ArrayList<String> replace = new ArrayList<String>(neededParts.size());
+		if(!fromFile)
+			replace = newWords(neededParts);
+		else
+			
 		
 		//this is a copy of mdLib
 		Scanner copy = fileRead(fname,3);
@@ -205,18 +205,22 @@ public class FileReader {
 			String line = copy.nextLine();
 			
 			int pos = line.indexOf("<");
-			
-			while(line.indexOf("<",pos) != -1){
+			if(pos != -1){
+			while(pos != -1){
 				String part1= line.substring(0,pos);
 				String part2= replace.get(word);
-				String part3= line.substring(line.indexOf(">",pos) + replace.get(word).length());
+				String part3= line.substring(line.indexOf(">",pos)+1);
 				
-				String s = line.substring(0,pos) + replace.get(word) + line.substring(pos + replace.get(word).length());
+				String s = line.substring(0,pos) + replace.get(word) + line.substring(line.indexOf(">", pos)+1);
 				out.println(s);
+				line = s;
 				word++;
 				pos = line.indexOf("<", pos +1);
 				
 			}	
+			}
+			else
+				out.println(line);
 		}
 		copy.close();
 		out.close();
@@ -230,20 +234,20 @@ public class FileReader {
 	 */
 	public static ArrayList<String> newWords(ArrayList<String> wordList){
 
-		//JFrame frame = new JFrame("Gimme some words!!!");
-		Scanner kybd = new Scanner(System.in);
+		JFrame frame = new JFrame("Gimme some words!!!");
+		//Scanner kybd = new Scanner(System.in);
 		
 		ArrayList<String> newWords = new ArrayList<String>();
 		int i = 0;
 		
 		for(String s : wordList) {
-			//newWords.add(JOptionPane.showInputDialog(frame, "Please input a " + wordList.get(i) ));
-			System.out.println("Please input a " + wordList.get(i) );
-			newWords.add(kybd.nextLine());
+			newWords.add(JOptionPane.showInputDialog(frame, "Please input a " + wordList.get(i) ));
+			//System.out.println("Please input a " + wordList.get(i) );
+			//newWords.add(kybd.nextLine());
 			i++;
 		}
 		
-		kybd.close();
+		//kybd.close();
 		
 		return newWords;
 	}
