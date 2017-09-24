@@ -27,7 +27,7 @@ public class FileReader {
 		}
 		
 		PrintWriter out = fileWrite(outputFile);
-/*
+
 		//This is part 1
 		Scanner in1 = fileRead(args[0], 1);
 		if (checkBraces(in1))
@@ -45,21 +45,15 @@ public class FileReader {
 		else
 			out.println("Files Not Identical");
 
-		*/
+
 		//This is part 3
 		Scanner madLibs = fileRead(args[2], 3);
-		ArrayList<String> neededParts = findWords(madLibs);
-		
-		//if(args[3] == null){
-			ArrayList<String> words = newWords(neededParts);
-			//SETWORDS DOESNT WORK
-			madLibs = setWords(madLibs, words, args[2]);
-			madLibs = fileRead(args[2],3);
-			while(madLibs.hasNextLine()){
-				String s = madLibs.nextLine();
-				out.println(s);
+				
+		if(args.length < 4){
+			setWords(madLibs, args[2]);
+			
 			}
-		//}
+		
 		
 		
 		
@@ -194,22 +188,34 @@ public class FileReader {
 	 * @param mdLib the poem with the missing words
 	 * @param replace the words to replace the string with
 	 */
-	public static Scanner setWords(Scanner mdLib, ArrayList<String> replace, String fname) {
+	public static void setWords(Scanner mdLib, String fname) {
+		//this gets the needed parts
+		ArrayList<String> neededParts = findWords(mdLib);
+		//this asks for the new words
+		ArrayList<String> replace = newWords(neededParts);
+		
+		//this is a copy of mdLib
 		Scanner copy = fileRead(fname,3);
+				
+		//this is the printWriter
+		PrintWriter out = fileWrite(outputFile);
 		
 		int word = 0; 
-		//THIS DOES NOT WORK YOU IDIOT WHAT ARE YOU THINKING THERE IS NO WAY THIS COULD EVER WORK YOU STUPID
 		while(copy.hasNextLine()) {
 			String line = copy.nextLine();
+			
 			int pos = line.indexOf("<");
-			//CHANGE THIS ENTIRELY
-			while(line.indexOf("<",pos) != -1) {
-				line = line.substring(0, line.indexOf("<",pos)) + replace.get(word)
-						+ line.substring(line.indexOf(word),pos);
-				pos = line.indexOf("<",pos+1);
-			}			
+			
+			while(line.indexOf("<",pos) != -1){
+				String s = line.substring(0,pos) + replace.get(word) + line.substring(pos + replace.get(word).length());
+				out.println(s);
+				word++;
+				pos = line.indexOf("<", pos +1);
+				
+			}	
 		}
-		return copy;
+		copy.close();
+		out.close();
 		
 	}
 	
