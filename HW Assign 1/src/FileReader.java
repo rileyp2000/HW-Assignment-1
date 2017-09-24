@@ -181,9 +181,9 @@ public class FileReader {
 		while(mdLib.hasNextLine()) {
 			int pos = 0;
 			String line = mdLib.nextLine();
-			while(line.indexOf("<",pos) != -1) {
-				missingWords.add(line.substring(line.indexOf("<",pos), line.indexOf(">", pos)+1 ));
-				pos = line.indexOf('<', pos +2);
+			while(pos != -1) {
+				missingWords.add(line.substring(line.indexOf("<",pos), line.indexOf(">", pos) ));
+				pos = line.indexOf("<")+1;
 			}
 		}
 		return missingWords; 
