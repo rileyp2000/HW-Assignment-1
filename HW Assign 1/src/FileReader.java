@@ -207,6 +207,10 @@ public class FileReader {
 			int pos = line.indexOf("<");
 			
 			while(line.indexOf("<",pos) != -1){
+				String part1= line.substring(0,pos);
+				String part2= replace.get(word);
+				String part3= line.substring(line.indexOf(">",pos) + replace.get(word).length());
+				
 				String s = line.substring(0,pos) + replace.get(word) + line.substring(pos + replace.get(word).length());
 				out.println(s);
 				word++;
