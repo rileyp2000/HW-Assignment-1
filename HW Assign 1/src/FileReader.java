@@ -17,10 +17,14 @@ import javax.swing.JOptionPane;
  */
 public class FileReader {
 
+	/**
+	 * This is the filename of the output file
+	 */
 	private static String outputFile = "output.txt";
 
 	public static void main(String[] args) {
 
+		// checks to make sure the program has enough files to use
 		if (args.length < 3) {
 			System.out.println("Not enough files my dude");
 			System.exit(1);
@@ -29,6 +33,8 @@ public class FileReader {
 		PrintWriter out = fileWrite(outputFile);
 
 		// This is part 1
+		// Reads in the first file and checks if the braces within it are
+		// balanced properly (syntatically)
 		Scanner in1 = fileRead(args[0], 1);
 		if (checkBraces(in1))
 			out.println("Braces Balanced\n");
@@ -36,6 +42,7 @@ public class FileReader {
 			out.println("Braces Not Balanced\n");
 
 		// This is part 2
+		// Takes in two files and compares them to see if they are identical
 		in1 = fileRead(args[0], 1);
 		Scanner in2 = fileRead(args[1], 2);
 
@@ -45,8 +52,10 @@ public class FileReader {
 			out.println("Files Not Identical");
 
 		// This is part 3
+		// this takes in a file with words missing (like mad libs) and will
+		// replace them with words
+		// supplied either by the user or a file
 		Scanner madLibs = fileRead(args[2], 3);
-
 		if (args.length < 4)
 			setWords(madLibs, args[2], false, "");
 		else
@@ -88,7 +97,7 @@ public class FileReader {
 	 *            a file name
 	 * @return
 	 *
-	 * 		PrintWriter of the file
+	 * 		PrintWriter Writes to the supplied file
 	 */
 	public static PrintWriter fileWrite(String fname) {
 		File file = new File(fname);
@@ -135,6 +144,9 @@ public class FileReader {
 	}
 
 	/**
+	 * <p>
+	 * Compares to files line by line to see if they are equal
+	 * </p>
 	 * 
 	 * @param f1
 	 *            first file
@@ -157,10 +169,61 @@ public class FileReader {
 		return true;
 
 	}
-
+	
+	
 	/**
 	 * 
-	 * @param mdLib the file with the missing words
+	 * @param wordList
+	 *            list of the parts of speech
+	 * @return ArrayList<String> of the new words to put into the story
+	 */
+	public static ArrayList<String> newWords(ArrayList<String> wordList) {
+
+		JFrame frame = new JFrame("Gimme some words!!!");
+		// Scanner kybd = new Scanner(System.in);
+
+		ArrayList<String> newWords = new ArrayList<String>();
+		int i = 0;
+		
+		//prompts the user for the new words
+		for (String s : wordList) {
+			newWords.add(JOptionPane.showInputDialog(frame, "Please input a " + wordList.get(i)));
+			// System.out.println("Please input a " + wordList.get(i) );
+			// newWords.add(kybd.nextLine());
+			i++;
+		}
+
+		// kybd.close();
+
+		return newWords;
+	}
+
+	
+	/**
+	 * <p> Reads in words from a file to be used to replace the placeholders
+	 * @param fname
+	 *            filename of the file to get the replacement words from
+	 * @return
+	 */
+	public static ArrayList<String> fileWords(String fname) {
+		Scanner wordsForRep = fileRead(fname, 3);
+		ArrayList<String> ret = new ArrayList<String>();
+
+		while (wordsForRep.hasNextLine())
+			ret.add(wordsForRep.nextLine());
+		return ret;
+
+	}
+
+
+	/**
+	 * <p>
+	 * finds the placeholders designated with<> in the file that will be
+	 * replaced
+	 * </p>
+	 * 
+	 * @param mdLib
+	 *            the file with the missing words
 	 * @return
 	 *
 	 * 		ArrayList<String> parts of speech to be replaced by actual words
@@ -179,94 +242,64 @@ public class FileReader {
 		return missingWords;
 	}
 
+	
 	/**
-	 * <p>this takes the words to be replaced and add them in the correct places in the file, then outputs it </p>
-	 * @param mdLib the poem with the missing words
-	 * @param replace the words to replace the string with
+	 * <p>
+	 * this takes the words to be replaced and add them in the correct places in
+	 * the file, then outputs the changed file
+	 * </p>
+	 * 
+	 * @param mdLib
+	 *            the poem with the missing words
+	 * @param replace
+	 *            the words to replace the string with
 	 */
 	public static void setWords(Scanner mdLib, String fname, boolean fromFile, String repFName) {
-		//this gets the needed parts
+		// this gets the needed parts
 		ArrayList<String> neededParts = findWords(mdLib);
-		//this asks for the new words
+		// this asks for the new words
 		ArrayList<String> replace = new ArrayList<String>();
-		if(!fromFile)
+		
+		//checks if the words will come from a file or from user prompt
+		if (!fromFile)
 			replace = newWords(neededParts);
-		else{
+		else {
 			replace = fileWords(repFName);
-			if(replace.size()< neededParts.size())
-				for(int i = 0; i <= neededParts.size() - replace.size(); i++)
+			if (replace.size() < neededParts.size())
+				//makes sure there is something to print
+				for (int i = 0; i <= neededParts.size() - replace.size(); i++)
 					replace.add("[Insert Word Here]");
 		}
-		
-		//this is a copy of mdLib
-		Scanner copy = fileRead(fname,3);
-				
-		//this is the printWriter
+
+		// this is a copy of mdLib
+		Scanner copy = fileRead(fname, 3);
+
+		// this is the printWriter
 		PrintWriter out = fileWrite(outputFile);
 		
-		int word = 0; 
-		while(copy.hasNextLine()) {
+		//goes through each line of the file and changes each part of speech to the new word with from the user or from a file
+		int word = 0;
+		while (copy.hasNextLine()) {
 			String line = copy.nextLine();
-			
+
 			int pos = line.indexOf("<");
-			if(pos != -1){
-			while(pos != -1 && word < replace.size()){
-				
-				String s = line.substring(0,pos) + replace.get(word) + line.substring(line.indexOf(">", pos)+1);
-				out.println(s);
-				line = s;
-				word++;
-				pos = line.indexOf("<", pos +1);
-				
-			}	
-			}
-			else
+			if (pos != -1) {
+				while (pos != -1 && word < replace.size()) {
+
+					String s = line.substring(0, pos) + replace.get(word) + line.substring(line.indexOf(">", pos) + 1);
+					out.println(s);
+					line = s;
+					word++;
+					pos = line.indexOf("<", pos + 1);
+
+				}
+			} else
 				out.println(line);
 		}
 		copy.close();
 		out.close();
-		
+
 	}
 
-	/**
-	 * 
-	 * @param wordList
-	 *            list of the parts of speech
-	 * @return ArrayList<String> of the new words to put into the story
-	 */
-	public static ArrayList<String> newWords(ArrayList<String> wordList) {
-
-		JFrame frame = new JFrame("Gimme some words!!!");
-		// Scanner kybd = new Scanner(System.in);
-
-		ArrayList<String> newWords = new ArrayList<String>();
-		int i = 0;
-
-		for (String s : wordList) {
-			newWords.add(JOptionPane.showInputDialog(frame, "Please input a " + wordList.get(i)));
-			// System.out.println("Please input a " + wordList.get(i) );
-			// newWords.add(kybd.nextLine());
-			i++;
-		}
-
-		// kybd.close();
-
-		return newWords;
-	}
-
-	/**
-	 * 
-	 * @param fname filename of the file to get the replacement words from
-	 * @return
-	 */
-	public static ArrayList<String> fileWords(String fname){
-		Scanner wordsForRep = fileRead(fname,3);
-		ArrayList<String> ret = new ArrayList<String>();
-		
-		while(wordsForRep.hasNextLine())
-			ret.add(wordsForRep.nextLine());
-		return ret;
-		
-	}
 
 }
