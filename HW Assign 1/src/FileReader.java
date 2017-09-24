@@ -53,8 +53,8 @@ public class FileReader {
 		//if(args[3] == null){
 			ArrayList<String> words = newWords(neededParts);
 			//SETWORDS DOESNT WORK
-			madLibs = setWords(madLibs, words);
-			
+			madLibs = setWords(madLibs, words, args[2]);
+			madLibs = fileRead(args[2],3);
 			while(madLibs.hasNextLine()){
 				String s = madLibs.nextLine();
 				out.println(s);
@@ -179,11 +179,11 @@ public class FileReader {
 		ArrayList<String> missingWords = new ArrayList<String>();
 		
 		while(mdLib.hasNextLine()) {
-			int pos = 0;
 			String line = mdLib.nextLine();
+			int pos = line.indexOf("<");
 			while(pos != -1) {
-				missingWords.add(line.substring(line.indexOf("<",pos), line.indexOf(">", pos) ));
-				pos = line.indexOf("<")+1;
+				missingWords.add(line.substring(line.indexOf("<",pos), line.indexOf(">", pos)+1 ));
+				pos = line.indexOf("<",pos +1);
 			}
 		}
 		return missingWords; 
@@ -194,14 +194,14 @@ public class FileReader {
 	 * @param mdLib the poem with the missing words
 	 * @param replace the words to replace the string with
 	 */
-	public static Scanner setWords(Scanner mdLib, ArrayList<String> replace) {
-		Scanner copy = mdLib.reset();
+	public static Scanner setWords(Scanner mdLib, ArrayList<String> replace, String fname) {
+		Scanner copy = fileRead(fname,3);
 		
-		int word = 0;
+		int word = 0; 
 		//THIS DOES NOT WORK YOU IDIOT WHAT ARE YOU THINKING THERE IS NO WAY THIS COULD EVER WORK YOU STUPID
 		while(copy.hasNextLine()) {
 			String line = copy.nextLine();
-			int pos = 0;
+			int pos = line.indexOf("<");
 			//CHANGE THIS ENTIRELY
 			while(line.indexOf("<",pos) != -1) {
 				line = line.substring(0, line.indexOf("<",pos)) + replace.get(word)
@@ -230,6 +230,7 @@ public class FileReader {
 			//newWords.add(JOptionPane.showInputDialog(frame, "Please input a " + wordList.get(i) ));
 			System.out.println("Please input a " + wordList.get(i) );
 			newWords.add(kybd.nextLine());
+			i++;
 		}
 		
 		kybd.close();
