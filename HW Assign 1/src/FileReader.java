@@ -46,7 +46,7 @@ public class FileReader {
 		in1 = fileRead(args[0], 1);
 		Scanner in2 = fileRead(args[1], 2);
 
-		if (compareFile(in1, in2))
+		if (in2 != null && compareFile(in1, in2))
 			out.println("Files Identical");
 		else
 			out.println("Files Not Identical");
