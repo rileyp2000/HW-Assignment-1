@@ -10,7 +10,8 @@ import javax.swing.JOptionPane;
 /**
  * <p>
  * This is the File Reading and Character matching and word substitution
- * assignment<\p>
+ * assignment.<br> This program works like mad libs, in that a the user fills in parts of speech in a story to create a new story
+ * </p>
  * 
  * @author rileyp
  *
@@ -50,6 +51,8 @@ public class FileReader {
 			out.println("Files Identical");
 		else
 			out.println("Files Not Identical");
+		
+		out.println();
 
 		// This is part 3
 		// this takes in a file with words missing (like mad libs) and will
@@ -58,9 +61,9 @@ public class FileReader {
 		Scanner madLibs = fileRead(args[2], 3);
 		if(madLibs != null) {
 		if (args.length < 4)
-			setWords(madLibs, args[2], false, "");
+			setWords(madLibs, args[2], false, "",out);
 		else
-			setWords(madLibs, args[2], true, args[3]);
+			setWords(madLibs, args[2], true, args[3],out);
 		}
 		out.close();
 	}
@@ -68,8 +71,10 @@ public class FileReader {
 	/**
 	 * 
 	 * @return Scanner a scanner of the txt file
+	 * 
 	 * @param fname
 	 *            is a file name
+	 * @param index saves which part of the program the error is referencing
 	 */
 	public static Scanner fileRead(String fname, int index) {
 
@@ -97,6 +102,7 @@ public class FileReader {
 	/**
 	 * @param fname
 	 *            a file name
+	 * 
 	 * @return
 	 *
 	 * 		PrintWriter Writes to the supplied file
@@ -112,7 +118,6 @@ public class FileReader {
 		} catch (FileNotFoundException ex) {
 
 			System.out.println("Cant open file: " + ex.getMessage() + " " + fname);
-			//System.exit(1);???
 			return null;
 
 		}
@@ -122,8 +127,7 @@ public class FileReader {
 	}
 
 	/**
-	 * <p>
-	 * This checks if the file has balanced braces<\p>
+	 * <p>This checks if the file has balanced braces</p>
 	 * 
 	 * @param in
 	 *            Scanner file
@@ -178,7 +182,7 @@ public class FileReader {
 	 * 
 	 * @param wordList
 	 *            list of the parts of speech
-	 * @return ArrayList<String> of the new words to put into the story
+	 * @return ArrayList&lt;String&gt; of the new words to put into the story
 	 */
 	public static ArrayList<String> newWords(ArrayList<String> wordList) {
 
@@ -191,12 +195,9 @@ public class FileReader {
 		//prompts the user for the new words
 		for (String s : wordList) {
 			newWords.add(JOptionPane.showInputDialog(frame, "Please input a " + wordList.get(i)));
-			// System.out.println("Please input a " + wordList.get(i) );
-			// newWords.add(kybd.nextLine());
 			i++;
 		}
 
-		// kybd.close();
 
 		return newWords;
 	}
@@ -206,7 +207,7 @@ public class FileReader {
 	 * <p> Reads in words from a file to be used to replace the placeholders
 	 * @param fname
 	 *            filename of the file to get the replacement words from
-	 * @return
+	 * @return ArrayList&lt;String&gt; the words read in from the file
 	 */
 	public static ArrayList<String> fileWords(String fname) {
 		Scanner wordsForRep = fileRead(fname, 3);
@@ -221,7 +222,7 @@ public class FileReader {
 
 	/**
 	 * <p>
-	 * finds the placeholders designated with<> in the file that will be
+	 * finds the placeholders designated within the file that will be
 	 * replaced
 	 * </p>
 	 * 
@@ -229,7 +230,7 @@ public class FileReader {
 	 *            the file with the missing words
 	 * @return
 	 *
-	 * 		ArrayList<String> parts of speech to be replaced by actual words
+	 * 		ArrayList&lt;String&gt; parts of speech to be replaced by actual words
 	 */
 	public static ArrayList<String> findWords(Scanner mdLib) {
 		ArrayList<String> missingWords = new ArrayList<String>();
@@ -246,18 +247,24 @@ public class FileReader {
 	}
 
 	
+	
+	 
+	 
+
 	/**
 	 * <p>
 	 * this takes the words to be replaced and add them in the correct places in
 	 * the file, then outputs the changed file
-	 * </p>
-	 * 
-	 * @param mdLib
-	 *            the poem with the missing words
-	 * @param replace
-	 *            the words to replace the string with
+	 </p>
+	 * @param mdLib this is the scanner of the unfilled poem
+	 * @param fname	the file name mdLib is refrencing
+	 * @param fromFile if the words are going to be from a file or not
+	 * @param repFName if the new words are coming from a file, this is the file name of it
+	 * @param out the printWriter used to print to the output
+	 *
+	 *void
 	 */
-	public static void setWords(Scanner mdLib, String fname, boolean fromFile, String repFName) {
+	public static void setWords(Scanner mdLib, String fname, boolean fromFile, String repFName, PrintWriter out) {
 		// this gets the needed parts
 		ArrayList<String> neededParts = findWords(mdLib);
 		// this asks for the new words
@@ -276,9 +283,6 @@ public class FileReader {
 
 		// this is a copy of mdLib
 		Scanner copy = fileRead(fname, 3);
-
-		// this is the printWriter
-		PrintWriter out = fileWrite(outputFile);
 		
 		//goes through each line of the file and changes each part of speech to the new word with from the user or from a file
 		int word = 0;
@@ -290,17 +294,17 @@ public class FileReader {
 				while (pos != -1 && word < replace.size()) {
 
 					String s = line.substring(0, pos) + replace.get(word) + line.substring(line.indexOf(">", pos) + 1);
-					out.println(s);
 					line = s;
 					word++;
 					pos = line.indexOf("<", pos + 1);
 
 				}
-			} else
+				out.println(line);
+				
+			} else 
 				out.println(line);
 		}
 		copy.close();
-		out.close();
 
 	}
 
