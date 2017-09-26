@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  * assignment.<br> This program works like mad libs, in that a the user fills in parts of speech in a story to create a new story
  * </p>
  * 
- * @author rileyp
+ * @author Patrick Riley
  *
  */
 public class FileReader {
